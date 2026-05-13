@@ -31,7 +31,7 @@ def call_gemini(user_message: str) -> str:
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     response = client.models.generate_content(
         model="gemini-1.5-flash",
-        contents=[{"role": "user", "parts": [{"text": SYSTEM_PROMPT + "\n\n" + user_message}]}],
+        contents=SYSTEM_PROMPT + "\n\n" + user_message,
     )
     return response.text
 
@@ -57,6 +57,7 @@ def webhook():
         return jsonify({"type": "message", "text": reply})
 
     except Exception as e:
+        print(f"WEBHOOK ERROR: {e}", flush=True)
         return jsonify({"type": "message", "text": f"Erro interno: {str(e)}"}), 500
 
 
